@@ -10,7 +10,7 @@ const JoinGameButton = () => {
 
   const handleJoinGame = (roomCode) => {
     if (roomCode && roomCode.length === 4) {
-      router.push(`/#${roomCode.toUpperCase()}`);
+      router.push(`/${roomCode.toUpperCase()}`);
       setIsModalOpen(false);
     } else {
       alert('Invalid room code. Please enter a 4-character code.');
