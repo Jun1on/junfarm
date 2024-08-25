@@ -6,7 +6,6 @@ import {
   InputOTPSlot,
 } from "@/components/ui/input-otp";
 import { REGEXP_ONLY_DIGITS_AND_CHARS } from "input-otp";
-import { Button } from "@/components/ui/button";
 const Modal = ({ isOpen, onClose, onSubmit }) => {
   function handleChange(value) {
     if (value.length == 4) {
