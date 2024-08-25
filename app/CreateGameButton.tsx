@@ -4,7 +4,7 @@ import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 
 const generateRoomCode = () => {
-  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+  const characters = 'ABCDEFGHIJKLMNPQRSTUVWXYZ123456789';
   let roomCode = '';
   for (let i = 0; i < 4; i++) {
     roomCode += characters.charAt(Math.floor(Math.random() * characters.length));
@@ -17,7 +17,7 @@ const CreateGameButton = () => {
 
   const handleCreateGame = () => {
     const roomCode = generateRoomCode();
-    router.push(`/#${roomCode}`);
+    router.push(`/${roomCode}`);
   };
 
   return (
