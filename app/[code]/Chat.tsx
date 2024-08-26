@@ -1,17 +1,29 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import io from "socket.io-client";
-const socket = io("http://localhost:8080");
+import { useEffect, useRef, useState } from "react";
 import { Input } from "@/components/ui/input";
+import { Socket } from "socket.io-client";
 
-const Chat = () => {
-  const [messages, setMessages] = useState([]);
+const Chat = ({ code, socket }: { code: String; socket: Socket }) => {
+  const [messages, setMessages] = useState<String[]>([]);
   const [input, setInput] = useState("");
+  const [isScrolledToBottom, setIsScrolledToBottom] = useState(true);
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+  const chatContainerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     socket.on("message", (message) => {
-      console.log(message);
+      const chatContainer = chatContainerRef.current;
+      if (chatContainer) {
+        console.log(
+          chatContainer.scrollHeight - chatContainer.scrollTop,
+          chatContainer.clientHeight
+        );
+        setIsScrolledToBottom(
+          chatContainer.scrollHeight - chatContainer.scrollTop <
+            chatContainer.clientHeight + 5
+        );
+      }
       setMessages((prevMessages) => [...prevMessages, message]);
     });
 
@@ -19,6 +31,13 @@ const Chat = () => {
       socket.off("message");
     };
   }, []);
+
+  useEffect(() => {
+    console.log(isScrolledToBottom);
+    if (isScrolledToBottom) {
+      messagesEndRef.current?.scrollIntoView();
+    }
+  }, [messages]);
 
   const sendMessage = () => {
     if (input.trim()) {
@@ -28,13 +47,14 @@ const Chat = () => {
   };
 
   return (
-    <div className="flex flex-col h-screen bg-card rounded-md">
-      <div className="flex-1 overflow-y-auto p-4 bg-white rounded shadow">
+    <div className="flex flex-col h-full bg-secondary rounded-md">
+      <div ref={chatContainerRef} className="flex-1 overflow-y-auto p-4">
         {messages.map((message, index) => (
-          <div key={index} className="mb-2 p-2 bg-gray-200 rounded text-black">
+          <div key={index} className="mb-2 p-2 bg-accent rounded break-all">
             {message}
           </div>
         ))}
+        <div ref={messagesEndRef} />
       </div>
       <div className="flex m-2">
         <Input
@@ -42,8 +62,9 @@ const Chat = () => {
           className="flex-1 p-2 border rounded"
           value={input}
           onChange={(e) => setInput(e.target.value)}
-          onKeyPress={(e) => e.key === "Enter" && sendMessage()}
+          onKeyDown={(e) => e.key === "Enter" && sendMessage()}
           placeholder="Send a message"
+          maxLength={100}
         />
       </div>
     </div>
