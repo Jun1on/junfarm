@@ -10,11 +10,9 @@ interface Player {
 
 const Players = ({
   username,
-  code,
   socket,
 }: {
   username: String;
-  code: String;
   socket: Socket;
 }) => {
   const [players, setPlayers] = useState<Player[]>([]);
