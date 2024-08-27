@@ -12,6 +12,7 @@ app.get('/', (req, res) => {
     res.send('<h1>Hello world</h1>');
 });
 
+const log = require('./log');
 const message = require('./socket/message');
 const { setReady, disconnect, playerJoin } = require('./socket/selectionScreen');
 
@@ -46,6 +47,13 @@ io.on('connection', (socket) => {
             emit(handler(client, ...args));
         } catch (error) {
             console.log(error);
+            log({
+                embeds: [{
+                    color: 0xE60000,
+                    title: "🚫 Runtime error",
+                    description: `\`\`\`${error.stack.substring(0, 4000)}\`\`\``,
+                }]
+            })
         }
     };
     function emit(tuple) {
