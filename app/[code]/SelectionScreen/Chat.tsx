@@ -15,10 +15,6 @@ const Chat = ({ code, socket }: { code: String; socket: Socket }) => {
     socket.on("message", (message) => {
       const chatContainer = chatContainerRef.current;
       if (chatContainer) {
-        console.log(
-          chatContainer.scrollHeight - chatContainer.scrollTop,
-          chatContainer.clientHeight
-        );
         setIsScrolledToBottom(
           chatContainer.scrollHeight - chatContainer.scrollTop <
             chatContainer.clientHeight + 5
@@ -33,7 +29,6 @@ const Chat = ({ code, socket }: { code: String; socket: Socket }) => {
   }, []);
 
   useEffect(() => {
-    console.log(isScrolledToBottom);
     if (isScrolledToBottom) {
       messagesEndRef.current?.scrollIntoView();
     }
