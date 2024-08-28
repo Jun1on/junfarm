@@ -42,14 +42,29 @@ const SelectionScreen = ({
     };
   }, [socket]);
 
+  const isAdmin = players[0] && players[0].username === username;
+  const isReady = players.some(
+    (player) => player.username === username && player.ready
+  );
+
   return (
     <main className="flex h-screen flex-row items-stretch justify-between p-6 bg-blue-900">
       <div className="flex h-full flex-col w-1/3">
         <InviteFriends code={code} />
-        <Players username={username} socket={socket} players={players} />
+        <Players
+          username={username}
+          socket={socket}
+          players={players}
+          isAdmin={isAdmin}
+        />
       </div>
 
-      <GameSettings admin={false} />
+      <GameSettings
+        socket={socket}
+        isAdmin={isAdmin}
+        players={players}
+        isReady={isReady}
+      />
 
       <div className="w-1/3 h-full">
         <Chat socket={socket} />

@@ -1,12 +1,25 @@
 "use client";
 
+import { Socket } from "socket.io-client";
 import { useState } from "react";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Button } from "@/components/ui/button";
+import Buttons from "./Buttons";
+import { Player } from "../interfaces/Player";
 
-const GameSettings = ({ admin }: { admin: boolean }) => {
+const GameSettings = ({
+  socket,
+  isAdmin,
+  players,
+  isReady,
+}: {
+  socket: Socket;
+  isAdmin: boolean;
+  players: Player[];
+  isReady: boolean;
+}) => {
   const [isPrivateGame, setIsPrivateGame] = useState(false);
   const [junion, setJunion] = useState(true);
+  const allPlayersReady = players.every((player) => player.ready);
 
   return (
     <div
@@ -21,7 +34,7 @@ const GameSettings = ({ admin }: { admin: boolean }) => {
               <Checkbox
                 checked={isPrivateGame}
                 onCheckedChange={() => setIsPrivateGame(!isPrivateGame)}
-                disabled={!admin}
+                disabled={!isAdmin}
               />
               <label className="ml-2">Private Game</label>
             </div>
@@ -29,7 +42,7 @@ const GameSettings = ({ admin }: { admin: boolean }) => {
               <Checkbox
                 checked={junion}
                 onCheckedChange={() => setJunion(!junion)}
-                disabled={!admin}
+                disabled={!isAdmin}
               />
               <label className="ml-2">Subscribe to Junion</label>
             </div>
@@ -51,15 +64,12 @@ const GameSettings = ({ admin }: { admin: boolean }) => {
         </div>
       </div>
 
-      {/* Ready and Start Buttons */}
-      <div className="flex justify-between pt-4 border-t border-blue-500">
-        <Button variant="default" disabled={!admin}>
-          I'm Ready
-        </Button>
-        <Button variant="default" disabled={!admin}>
-          Start Game
-        </Button>
-      </div>
+      <Buttons
+        socket={socket}
+        isReady={isReady}
+        allPlayersReady={allPlayersReady}
+        isAdmin={isAdmin}
+      />
     </div>
   );
 };

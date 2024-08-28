@@ -23,6 +23,7 @@ io.on('connection', (socket) => {
         id: socket.id,
         code: null,
         username: null,
+        displayName: null,
     };
 
     socket.on('setClient', (_client) => {
