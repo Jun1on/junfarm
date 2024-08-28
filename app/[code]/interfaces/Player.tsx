@@ -1,5 +1,5 @@
 export interface Player {
   username: string;
-  displayName: string;
+  nickname: string;
   ready: boolean;
 }

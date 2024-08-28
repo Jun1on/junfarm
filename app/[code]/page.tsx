@@ -22,7 +22,7 @@ export default function Home() {
     socket.emit("setClient", {
       code,
       username,
-      displayName: localStorage.getItem("displayName"),
+      nickname: localStorage.getItem("nickname"),
     });
   }, [socket]);
 
@@ -48,8 +48,23 @@ export default function Home() {
       }
     });
 
+    socket.on("kickPlayer", (kickedUsername) => {
+      if (kickedUsername === username) {
+        toast("You were kicked from the game.");
+        socket.disconnect();
+        document.body.innerHTML += `
+        <div id="transparent-overlay" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); z-index: 999;"></div>
+        <div style="position: fixed; bottom: 20px; right: 20px; background-color: rgba(0, 0, 0, 0.8); color: white; padding: 20px; border-radius: 8px; z-index: 1000; box-shadow: 0 0 10px rgba(0,0,0,0.5);">
+          You have been kicked from the game.
+        </div>
+      `;
+      }
+    });
+
     return () => {
       socket.off("toast");
+      socket.off("duplicatePlayer");
+      socket.off("kickPlayer");
     };
   }, [socket]);
 

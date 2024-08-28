@@ -12,7 +12,7 @@ app.use(cors());
 
 const log = require('./log');
 const message = require('./socket/message');
-const { setReady, disconnect, playerJoin, getRoom } = require('./socket/selectionScreen');
+const { setReady, disconnect, playerJoin, setNickname, kickPlayer, getRoom } = require('./socket/selectionScreen');
 
 app.get('/room/:code', (req, res) => {
     res.send(JSON.stringify(getRoom(req.params.code)));
@@ -23,7 +23,7 @@ io.on('connection', (socket) => {
         id: socket.id,
         code: null,
         username: null,
-        displayName: null,
+        nickname: null,
     };
 
     socket.on('setClient', (_client) => {
@@ -44,6 +44,14 @@ io.on('connection', (socket) => {
         handle(setReady, client, ready)
     });
 
+    socket.on('setNickname', (nickname) => {
+        handle(setNickname, client, nickname)
+    });
+
+    socket.on('kickPlayer', (username) => {
+        handle(kickPlayer, client, username)
+    });
+
     function handle(handler, client, ...args) {
         if (client.id !== socket.id) return;
         try {
@@ -59,8 +67,17 @@ io.on('connection', (socket) => {
             })
         }
     };
-    function emit(tuple) {
-        if (!tuple) return;
+    function emit(tuples) {
+        if (!tuples) return;
+        if (typeof tuples[0] === 'string') {
+            emitSingle(tuples);
+        } else {
+            for (const tuple of tuples) {
+                emitSingle(tuple);
+            }
+        }
+    }
+    function emitSingle(tuple) {
         io.to(client.code).emit(tuple[0], tuple[1]);
         if (tuple[2]) {
             io.to(client.code).emit("toast", tuple[2]);
