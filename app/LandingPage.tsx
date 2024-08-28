@@ -1,4 +1,3 @@
-"use client";
 import React from "react";
 import CreateGameButton from "./CreateGameButton";
 import JoinGameButton from "./JoinGameButton";

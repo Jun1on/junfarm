@@ -8,24 +8,25 @@ const io = require('socket.io')(http, {
     }
 });
 app.use(cors());
-app.get('/', (req, res) => {
-    res.send('<h1>Hello world</h1>');
-});
+
 
 const log = require('./log');
 const message = require('./socket/message');
-const { setReady, disconnect, playerJoin } = require('./socket/selectionScreen');
+const { setReady, disconnect, playerJoin, getRoom } = require('./socket/selectionScreen');
 
-const rooms = {};
+app.get('/room/:code', (req, res) => {
+    res.send(JSON.stringify(getRoom(req.params.code)));
+});
 
 io.on('connection', (socket) => {
     let client = {
+        id: socket.id,
         code: null,
         username: null,
     };
 
     socket.on('setClient', (_client) => {
-        client = _client;
+        client = { ...client, ..._client };
         emit(playerJoin(client));
         socket.join(client.code);
     });
@@ -43,6 +44,7 @@ io.on('connection', (socket) => {
     });
 
     function handle(handler, client, ...args) {
+        if (client.id !== socket.id) return;
         try {
             emit(handler(client, ...args));
         } catch (error) {
