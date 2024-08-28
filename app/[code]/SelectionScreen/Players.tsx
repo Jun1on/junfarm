@@ -10,33 +10,19 @@ const Players = ({
   username,
   socket,
   players,
+  isAdmin,
 }: {
   username: String;
   socket: Socket;
   players: Player[];
+  isAdmin: boolean;
 }) => {
-  const isAdmin = players[0] && players[0].username === username;
-  const [isReady, setIsReady] = useState(isAdmin);
-
-  useEffect(() => {
-    if (isAdmin) {
-      socket.emit("setReady", true);
-    }
-  }, [isAdmin, socket]);
-
   const handleEdit = () => {
     alert("TODO");
   };
   const handleKick = (playerUsername: string) => {
     socket.emit("kickPlayer", playerUsername);
   };
-
-  const handleReady = () => {
-    socket.emit("setReady", !isReady);
-    setIsReady(!isReady);
-  };
-
-  const allPlayersReady = players.every((player) => player.ready);
 
   return (
     <div className="w-full h-full bg-blue-700 rounded-md p-4 overflow-y-auto flex flex-col">
@@ -64,7 +50,7 @@ const Players = ({
             <div>
               <span className="font-semibold truncate block max-w-[calc(100%-1.5rem)]">
                 {index === 0 ? "👑 " : ""}
-                {player.username}
+                {player.displayName}
                 {player.username === username ? " (You)" : ""}
               </span>
             </div>

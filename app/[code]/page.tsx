@@ -19,7 +19,11 @@ export default function Home() {
   const username = getUsername();
 
   useEffect(() => {
-    socket.emit("setClient", { code, username });
+    socket.emit("setClient", {
+      code,
+      username,
+      displayName: localStorage.getItem("displayName"),
+    });
   }, [socket]);
 
   useEffect(() => {
