@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Socket } from "socket.io-client";
 
-const Chat = ({ code, socket }: { code: String; socket: Socket }) => {
+const Chat = ({ socket }: { socket: Socket }) => {
   const [messages, setMessages] = useState<String[]>([]);
   const [input, setInput] = useState("");
   const [isScrolledToBottom, setIsScrolledToBottom] = useState(true);

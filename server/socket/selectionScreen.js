@@ -23,15 +23,20 @@ function playerJoin(client) {
     const player = { username: client.username, ready: !rooms[client.code].length }
     let toast;
     if (!rooms[client.code].some(p => p.username === player.username)) {
-        toast = `${client.username} connected`
         rooms[client.code].push(player);
+        return ['updatePlayers', rooms[client.code], `${client.username} connected`];
+    } else {
+        return ['duplicatePlayer', { duplicateUsername: client.username, id: client.id }];
     }
+}
 
-    return ['updatePlayers', rooms[client.code], toast];
+function getRoom(code) {
+    return rooms[code];
 }
 
 module.exports = {
     setReady,
     disconnect,
-    playerJoin
+    playerJoin,
+    getRoom
 }

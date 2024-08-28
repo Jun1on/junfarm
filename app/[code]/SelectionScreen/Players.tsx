@@ -15,7 +15,6 @@ const Players = ({
   socket: Socket;
   players: Player[];
 }) => {
-  console.log(username, "username");
   const isAdmin = players[0] && players[0].username === username;
   const [isReady, setIsReady] = useState(isAdmin);
 

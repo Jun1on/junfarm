@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { Input } from "@/components/ui/input";
+import { usePathname } from "next/navigation";
 
 const InviteFriends = ({ code }: { code: String }) => {
   const [buttonText, setButtonText] = useState("Copy");

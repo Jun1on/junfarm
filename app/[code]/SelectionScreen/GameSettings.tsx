@@ -4,7 +4,7 @@ import { useState } from "react";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
 
-const GameSettings = ({ code, admin }: { code: String; admin: boolean }) => {
+const GameSettings = ({ admin }: { admin: boolean }) => {
   const [isPrivateGame, setIsPrivateGame] = useState(false);
   const [junion, setJunion] = useState(true);
 
