@@ -4,7 +4,8 @@ import { useState, useEffect } from "react";
 import { Socket } from "socket.io-client";
 import { PencilIcon, XMarkIcon } from "@heroicons/react/24/solid";
 import { Player } from "../interfaces/Player";
-import { Button } from "@/components/ui/button";
+import { toast } from "react-hot-toast";
+const sampleNicknames = require("@/data/sampleNicknames");
 
 const Players = ({
   username,
@@ -18,8 +19,13 @@ const Players = ({
   isAdmin: boolean;
 }) => {
   const handleEdit = () => {
-    alert("TODO");
+    const randomNickname =
+      sampleNicknames[Math.floor(Math.random() * sampleNicknames.length)];
+    localStorage.setItem("nickname", randomNickname);
+    socket.emit("setNickname", randomNickname);
+    toast("Create an account to set a custom nickname.");
   };
+
   const handleKick = (playerUsername: string) => {
     socket.emit("kickPlayer", playerUsername);
   };
@@ -50,7 +56,7 @@ const Players = ({
             <div>
               <span className="font-semibold truncate block max-w-[calc(100%-1.5rem)]">
                 {index === 0 ? "👑 " : ""}
-                {player.displayName}
+                {player.nickname}
                 {player.username === username ? " (You)" : ""}
               </span>
             </div>

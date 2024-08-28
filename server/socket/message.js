@@ -12,7 +12,7 @@ module.exports = (client, content) => {
                 return result;
         }
     } else {
-        console.log(`${client.displayName}: ${content}`);
-        return ['message', `${client.displayName}: ${content}`];
+        console.log(`${client.nickname}: ${content}`);
+        return ['message', `${client.nickname}: ${content}`];
     }
 }

@@ -1,13 +1,15 @@
-"use client"
-import React from 'react';
-import { useRouter } from 'next/navigation';
-import { Button } from '@/components/ui/button';
+"use client";
+import React from "react";
+import { useRouter } from "next/navigation";
+import { Button } from "@/components/ui/button";
 
 const generateRoomCode = () => {
-  const characters = 'ABCDEFGHIJKLMNPQRSTUVWXYZ123456789';
-  let roomCode = '';
+  const characters = "ABCDEFGHJKLMNPQRSTUVWXYZ123456789";
+  let roomCode = "";
   for (let i = 0; i < 4; i++) {
-    roomCode += characters.charAt(Math.floor(Math.random() * characters.length));
+    roomCode += characters.charAt(
+      Math.floor(Math.random() * characters.length)
+    );
   }
   return roomCode;
 };
@@ -21,7 +23,7 @@ const CreateGameButton = () => {
   };
 
   return (
-    <Button onClick={handleCreateGame} className="mr-4"	>
+    <Button onClick={handleCreateGame} className="mr-4">
       Create Game
     </Button>
   );
